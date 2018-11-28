@@ -53,6 +53,8 @@ public class Common {
 	private String secretkeyFileStrDecrypt;
 	public Map<String, String> addressKeyMap = new HashMap<String, String>();//解密后的公钥私钥map
 	
+	public static boolean SIGNFLAG = true;
+	
 	/**
 	 * @author WangWei
 	 * @Description 初始化

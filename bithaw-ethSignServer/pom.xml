@@ -6,12 +6,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<description>bithaw签名服务</description>
-	<properties>
-		<java.version>1.8</java.version>
-		<spring.cloud.version>Dalston.SR3</spring.cloud.version>
-		<spring.boot.version>1.5.6.RELEASE</spring.boot.version>
-		<springfox.version>2.6.1</springfox.version>
-	</properties>
 	<repositories>
 		<repository>
 			<id>nexus-c5</id>
@@ -26,6 +20,15 @@
 		<version>1.5.6.RELEASE</version>
 	</parent>
 
+	<properties>
+		<java.version>1.8</java.version>
+		<spring.cloud.version>Dalston.SR3</spring.cloud.version>
+		<spring.boot.version>1.5.6.RELEASE</spring.boot.version>
+		<springfox.version>2.6.1</springfox.version>
+		<thymeleaf.version>3.0.0.RELEASE</thymeleaf.version>
+		<thymeleaf-layout-dialect.version>2.0.0</thymeleaf-layout-dialect.version>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -34,6 +37,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -63,8 +67,25 @@
 			<artifactId>fastjson</artifactId>
 			<version>1.1.41</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+		<!-- <dependency> <groupId>net.sourceforge.nekohtml</groupId> <artifactId>nekohtml</artifactId> 
+			<version>1.9.22</version> </dependency> -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
 	</dependencies>
+
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

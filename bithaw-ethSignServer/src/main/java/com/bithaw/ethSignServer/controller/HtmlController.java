@@ -212,4 +212,24 @@ public class HtmlController {
 		return new JSONBuilder().put("code", "1").put("message", "添加成功").build().toJSONString();
 	}
 	
+	@PostMapping("get-sign-server-status")
+	@ResponseBody
+	public String getSignServerStatus(){
+		if(Common.SIGNFLAG){
+			return "1";
+		}else{
+			return "0";
+		}
+	}
+	
+	@PostMapping("change-sign-server-status")
+	@ResponseBody
+	public void changeSignServerStatus(@RequestParam("flag")String flag){
+		if("0".equals(flag)){
+			Common.SIGNFLAG = false;
+		}
+		if("1".equals(flag)){
+			Common.SIGNFLAG = true;
+		}
+	}
 }
