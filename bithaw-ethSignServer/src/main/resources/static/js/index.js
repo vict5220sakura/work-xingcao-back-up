@@ -95,30 +95,44 @@
 	$("#stopSignServer").click(function(){
 		var params = {};
 		params.flag = "0";
+		params.sign = $("#changeSignServerStatusSign").val();
 		$.ajax({
 			async:false, 
 			url:"change-sign-server-status",
 			success:function(data){
-				window.location.reload();
+				if(data.code == "0"){
+					alert(data.message)
+				}else if(data.code == "1"){
+					window.location.reload();
+				}else{
+					alert("未知错误");
+				}
 			},
 			data:params,
 			type:"post",
-			dataType:"text"
+			dataType:"json"
 		});
 	});
 	
 	$("#startSignServer").click(function(){
 		var params = {};
 		params.flag = "1";
+		params.sign = $("#changeSignServerStatusSign").val();
 		$.ajax({
 			async:false, 
 			url:"change-sign-server-status",
 			success:function(data){
-				window.location.reload();
+				if(data.code == "0"){
+					alert(data.message)
+				}else if(data.code == "1"){
+					window.location.reload();
+				}else{
+					alert("未知错误");
+				}
 			},
 			data:params,
 			type:"post",
-			dataType:"text"
+			dataType:"json"
 		});
 	});
 	

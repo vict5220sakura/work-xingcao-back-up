@@ -224,12 +224,20 @@ public class HtmlController {
 	
 	@PostMapping("change-sign-server-status")
 	@ResponseBody
-	public void changeSignServerStatus(@RequestParam("flag")String flag){
+	public String changeSignServerStatus(@RequestParam("flag")String flag, @RequestParam("sign")String sign){
+		if(GoogleAuthenticator.verify(this.authenticatorKey, sign)){
+			
+		}else{
+			return new JSONBuilder().put("code", "0").put("message", "谷歌验证码错误").build().toJSONString();
+		}
 		if("0".equals(flag)){
 			Common.SIGNFLAG = false;
+			return new JSONBuilder().put("code", "1").put("message", "暂停成功").build().toJSONString();
 		}
 		if("1".equals(flag)){
 			Common.SIGNFLAG = true;
+			return new JSONBuilder().put("code", "1").put("message", "恢复成功").build().toJSONString();
 		}
+		return new JSONBuilder().put("code", "0").put("message", "未知错误").build().toJSONString();
 	}
 }
