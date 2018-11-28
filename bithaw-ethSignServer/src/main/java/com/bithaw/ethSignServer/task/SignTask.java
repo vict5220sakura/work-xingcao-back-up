@@ -39,7 +39,7 @@ public class SignTask {
 	 * @return void
 	 * @date 2018年8月27日 下午2:29:45
 	 */
-	@Scheduled(cron = "0/5 * * * * ? ")
+	//@Scheduled(cron = "0/5 * * * * ? ")
     public void getAwaitSignData(){
 		if(common.addressKeyMap == null || common.addressKeyMap.size() == 0){
 			log.info("秘钥为空,直接略过");

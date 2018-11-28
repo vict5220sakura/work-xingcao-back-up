@@ -1,3 +1,5 @@
+server:
+  port: 42326
 secretkeyFile: D:\aesPrivateKey.key #秘钥文件
 secretkeyFileAESPassword: 5220 #秘钥文件密码
 #网络签名
@@ -6,3 +8,17 @@ signserver:
   privateKey: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJZBecO2bOF1fFNmu55KPoWpuhgCsQtjB4U/CUISkDW6/R+olHdNxTLHgr/Y2RoCgS1dTs43/Y2amnd42nTQ3uB5LzyRrgr51RM7XwHZ2qCcfe540+SpTKhqNZAVkrB2KR6g5qxEFBLnR7H2TLUzC0VUGr5h59VNd9A5RRPW/dVDAgMBAAECgYAPPntVENgBE8NWTtDwIUYwl2Sq9PLzXcuwiBGvY2TAHsV5hcfyRrCgEz+/qQd1rRVf/dx17ZZK3ImZX2iCe4JxCYjyR0/0kMPkXOlqcHyA6jfSCMrFBkZuJboMhb9zplS8Aaoaiix3li7LYN8UoCfYY8iRZS+LMO0Us5nkDldcoQJBAOHcFhdt/WGdn3dnJyBII8hbr5OVgu0GpPOYkgttYcbf4dL1UtBbXT+8qjNWY/NDkD9tR+ClOqSUW9WzfIeIe1MCQQCqTpNjy2WLQybiborp+LHvBLR1BI8M9MvmG4n2veAnW++/HYDeEFl0oPRySGJzUPIyokB+/avGaLl5TK+E6/BRAkEAtnpPauyVe8mSrjCsHtvJ9TWGXFG+buwgVyMcU5kzFy+Izx0fpHE8nKM8S6/vnvomT+hl2y0DfTbUH4sdAI+XOwJABpcTzQDJ5SGsF4b/iR4+hGlCMmUCxBWU7kqShCHE0sET/ek+W1l2nLS9wM5cQOoY9SyiIkfepcbXpoH5KMOYgQJAdZPpcjHDbJdqOWd4Qc7Nc5ls83+pot00v+tG04/Y77wcoa+YP6LhjdBT555Gap70PeelaBU1cro5dxjVW1TDnA==  
 getAwaitDataUrl: http://127.0.0.1:3015/sign/getAwaitData #获取待签名数据接口地址
 setRawTransactionUrl: http://127.0.0.1:3015/sign/setRawTransaction #返回签名后数据接口地址
+
+app.username: admin
+app.password: admin
+
+app.authenticator.key: 4xunxuxdcjcwte6eo6jx6i5ooqndfyvp
+
+#spring.thymeleaf.prefix: classpath:/templates/
+#spring.thymeleaf.suffix: .html
+#spring.thymeleaf.mode: HTML5
+#spring.thymeleaf.encoding: UTF-8
+#spring.thymeleaf.content-type: text/html
+spring.thymeleaf.cache: false
+#spring.resources.chain.strategy.content.enabled: true
+#spring.resources.chain.strategy.content.paths: /**

@@ -7,12 +7,15 @@
 package com.bithaw.ethSignServer.common;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.security.NoSuchProviderException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +51,7 @@ public class Common {
 	public String setRawTransactionUrl;//返回签名数据地址,不可为空
 	
 	private String secretkeyFileStrDecrypt;
-	public Map<String,String> addressKeyMap = new HashMap<String,String>();//解密后的公钥私钥map
+	public Map<String, String> addressKeyMap = new HashMap<String, String>();//解密后的公钥私钥map
 	
 	/**
 	 * @author WangWei
@@ -120,8 +123,37 @@ public class Common {
 				continue;
 			}
 			Credentials create = Credentials.create(privateKey.trim());
-			addressKeyMap.put(create.getAddress(), privateKey);
+			addressKeyMap.put(create.getAddress().toLowerCase(), privateKey);
 		}
 		log.info("初始化-装在秘钥文件结束");
 	}
+	
+	/**
+	 * 将秘钥文件写入文件
+	 * @author WangWei
+	 * @throws IOException 
+	 * @Description 
+	 * @method writeSecretkeyFile void
+	 * @date 2018年11月28日 上午10:12:31
+	 */
+	public void writeSecretkeyFile() throws IOException{
+		File file = new File(secretkeyFilePath);
+		BufferedWriter bWriter = new BufferedWriter(new FileWriter(file, false));
+		if(addressKeyMap.isEmpty()){
+			return;
+		}
+		JSONArray jsonArray = new JSONArray();
+		Set<String> addresses = addressKeyMap.keySet();
+		for(String address : addresses){
+			String privateKey = addressKeyMap.get(address);
+			String aesEncodePrivateKey = AESUtil.AESEncode(secretkeyFileAESPassword, privateKey);
+			jsonArray.add(aesEncodePrivateKey);
+		}
+		
+		bWriter.write(jsonArray.toJSONString());
+		bWriter.flush();
+		bWriter.close();
+	}
+	
+	
 }
