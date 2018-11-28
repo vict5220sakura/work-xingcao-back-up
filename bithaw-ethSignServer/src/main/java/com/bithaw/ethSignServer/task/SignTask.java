@@ -9,6 +9,7 @@ package com.bithaw.ethSignServer.task;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.bithaw.ethSignServer.bean.AwaitData;
@@ -38,7 +39,7 @@ public class SignTask {
 	 * @return void
 	 * @date 2018年8月27日 下午2:29:45
 	 */
-	//@Scheduled(cron = "0/5 * * * * ? ")
+	@Scheduled(cron = "0/5 * * * * ? ")
     public void getAwaitSignData(){
     	if(!Common.SIGNFLAG){
     		log.info("未开启签名服务器!");

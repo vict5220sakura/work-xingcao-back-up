@@ -53,8 +53,10 @@ public class Common {
 	private String secretkeyFileStrDecrypt;
 	public Map<String, String> addressKeyMap = new HashMap<String, String>();//解密后的公钥私钥map
 	
-	public static boolean SIGNFLAG = true;
+	public static boolean SIGNFLAG = false;
 	
+	@Value("${signflag}")
+	private String signflag;
 	/**
 	 * @author WangWei
 	 * @Description 初始化
@@ -66,6 +68,11 @@ public class Common {
 	 */
 	public void init() throws Throwable{
 		log.info("初始化");
+		if(signflag.equals("0")){
+			this.SIGNFLAG = false;
+		}else{
+			this.SIGNFLAG = true;
+		}
 		readSecretkeyFile();
 		loadAddressKeyMap();
 		log.info("初始化结束");
@@ -82,6 +89,9 @@ public class Common {
 	private void readSecretkeyFile() throws IOException{
 		log.info("初始化-读取文件");
 		File file = new File(secretkeyFilePath);
+		if(!file.exists()){
+			return;
+		}
 	    BufferedReader bReader = new BufferedReader(new FileReader(file));
 	    StringBuilder sb = new StringBuilder();
 	    String s = "";
@@ -115,6 +125,9 @@ public class Common {
 	 */
 	private void loadAddressKeyMap() throws Throwable{
 		log.info("初始化-装在秘钥文件");
+		if(secretkeyFileStrDecrypt == null || "".equals(secretkeyFileStrDecrypt)){
+			return;
+		}
 		JSONArray jsonArray = JSONArray.parseArray(secretkeyFileStrDecrypt);
 		for(int i = 0 ; i < jsonArray.size() ; i++){
 			String privateKey = jsonArray.getString(i);

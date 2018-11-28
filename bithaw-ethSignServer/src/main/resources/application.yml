@@ -1,7 +1,8 @@
 server:
-  port: 42326
+  port: 5051
 secretkeyFile: D:\aesPrivateKey.key #秘钥文件
 secretkeyFileAESPassword: 5220 #秘钥文件密码
+signflag: 0 # 0初始化暂停签名,1初始化开启签名
 #网络签名
 signserver: 
   publicKey: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJg4y/bi17nOvMwOyaerqjmJTnTTsx6qZqow200JXuOfG8WTDpDbR7YM6N2oal9dz2/RgqNuTm9qOaL2sif7gK0CAwEAAQ==
