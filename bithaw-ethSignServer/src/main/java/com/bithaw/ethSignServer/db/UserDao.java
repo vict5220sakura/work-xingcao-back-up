@@ -6,15 +6,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSONArray;
+import com.bithaw.ethSignServer.common.Common;
 import com.bithaw.ethSignServer.util.AESUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class UserDao {
 	
@@ -45,6 +48,7 @@ public class UserDao {
 		File file = new File(this.serverdir + this.userfile);
 		if(!file.exists()){
 			//用户文件不存在
+			log.info("用户文件不存在");
 			return;
 		}
 	    BufferedReader bReader = new BufferedReader(new FileReader(file));
@@ -65,7 +69,11 @@ public class UserDao {
 	    }
 	    this.username = jsonArray.getString(0);
 	    this.password = jsonArray.getString(1);
-	    this.password = jsonArray.getString(2);
+	    this.authenticatorKey = jsonArray.getString(2);
+	    
+	    //载入用户文件成功,将第一次登录标记置为空
+	    Common.FIRST_LOGIN_FLAG = false;
+	    log.info("载入用户文件成功");
 	}
 	
 	/**
@@ -77,7 +85,14 @@ public class UserDao {
 	 * @date 2018年11月28日 上午10:12:31
 	 */
 	public void writeUserFile() throws IOException{
+		File dir = new File(this.serverdir);
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
 		File file = new File(this.serverdir + this.userfile);
+		if(!file.exists()){
+			file.createNewFile();
+		}
 		BufferedWriter bWriter = new BufferedWriter(new FileWriter(file, false));
 		if(this.username == null || "".equals(this.username)
 			|| this.password == null || "".equals(this.password)

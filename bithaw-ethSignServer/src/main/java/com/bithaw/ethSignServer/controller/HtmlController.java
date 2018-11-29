@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +37,9 @@ public class HtmlController {
 	 */
 	@RequestMapping("index")
 	public String index(){
+		if(Common.FIRST_LOGIN_FLAG){
+			return "admin";
+		}
 		return "index";
 	}
 	
@@ -247,5 +249,52 @@ public class HtmlController {
 			return new JSONBuilder().put("code", "1").put("message", "恢复成功").build().toJSONString();
 		}
 		return new JSONBuilder().put("code", "0").put("message", "未知错误").build().toJSONString();
+	}
+	
+	/**
+	 * @author WangWei
+	 * @Description 修改密码
+	 * @method changePassword
+	 * @param password
+	 * @param passwordRe
+	 * @param sign
+	 * @return String
+	 * @date 2018年11月29日 下午1:14:47
+	 */
+	@PostMapping("change-password")
+	@ResponseBody
+	public String changePassword(
+			@RequestParam("password")String password,
+			@RequestParam("password_re")String passwordRe,
+			@RequestParam("sign")String sign
+			){
+		if(isNull(password) || isNull(passwordRe) || isNull(sign)){
+			return new JSONBuilder().put("code", "0").put("message", "参数为空").build().toJSONString();
+		}
+		
+		if(!password.equals(passwordRe)){
+			return new JSONBuilder().put("code", "0").put("message", "两次输入密码不一致").build().toJSONString();
+		}
+		
+		if(!GoogleAuthenticator.verify(userDao.authenticatorKey, sign)){
+			return new JSONBuilder().put("code", "0").put("message", "谷歌验证码错误").build().toJSONString();
+		}
+		
+		//通过,可以修改密码
+		userDao.password = password;
+		try {
+			userDao.writeUserFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+			try {
+				userDao.loadUserFile();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			return new JSONBuilder().put("code", "0").put("message", "写入文件错误,请重试").build().toJSONString();
+		}
+		//清空token
+		Common.loginToken= null;
+		return new JSONBuilder().put("code", "1").put("message", "修改成功").build().toJSONString();
 	}
 }

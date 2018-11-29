@@ -2,11 +2,14 @@ server:
   port: 5051
 #服务文件存储路径
 serverdir: D:\test\
+
 #文件存储加密秘钥
-secretkeyFileAESPassword: 123 #秘钥文件密码
+secretkeyFileAESPassword: asdnkjnkls #秘钥文件密码
+
 #用户文件存储名
 app.userfile: admin.prop
 loginOutTime: 10 #用户登录过期时间(分钟)
+
 #初始登录名及密码
 initial.username: admin #登录名
 initial.password: admin #初始密码需要启动时指定,保证一次

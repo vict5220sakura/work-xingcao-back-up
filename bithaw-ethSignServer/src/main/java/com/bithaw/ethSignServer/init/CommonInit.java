@@ -13,7 +13,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.bithaw.ethSignServer.common.Common;
-import com.bithaw.ethSignServer.service.impl.SignServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -208,7 +208,14 @@ public class Common {
 	 * @date 2018年11月28日 上午10:12:31
 	 */
 	public void writeSecretkeyFile() throws IOException{
+		File dir = new File(this.serverdir);
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
 		File file = new File(serverdir + secretkeyFilePath);
+		if(!file.exists()){
+			file.createNewFile();
+		}
 		BufferedWriter bWriter = new BufferedWriter(new FileWriter(file, false));
 		if(addressKeyMap.isEmpty()){
 			return;

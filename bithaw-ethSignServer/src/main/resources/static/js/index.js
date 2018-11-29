@@ -199,3 +199,26 @@
 			});
 		}
 	});
+	
+	//点击按钮修改密码
+	$("#changePassword").click(function(){
+		var params = {};
+		params.password = $("#changePasswordInput").val();
+		params.password_re = $("#changePasswordReInput").val();
+		params.sign = $("#changePasswordGoogleSign").val();
+		$.ajax({
+			async:false, 
+			url:"change-password",
+			success:function(data){
+				if(data.code == "0"){
+					alert(data.message)
+				}else if(data.code == "1"){
+					alert(data.message);
+					window.location.reload();
+				}
+			},
+			type:"post",
+			data:params,
+			dataType:"JSON"
+		});
+	});

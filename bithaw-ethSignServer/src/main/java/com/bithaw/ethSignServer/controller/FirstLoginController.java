@@ -104,9 +104,9 @@ public class FirstLoginController {
 		//通过验证,可以生成	
 		String createSecretKey = GoogleAuthenticator.createSecretKey();
 		//通过验证可以创建用户文件
+		userDao.username = this.initialUsername;
 		userDao.password = password;
 		userDao.authenticatorKey = createSecretKey;
-		userDao.username = this.initialUsername;
 		try {
 			userDao.writeUserFile();
 		} catch (IOException e) {
@@ -116,8 +116,6 @@ public class FirstLoginController {
 		Common.FIRST_LOGIN_FLAG = false;
 		return new JSONBuilder().put("code", "1").put("message", "生成成功").put("google_sign", createSecretKey).build().toJSONString();
 	}
-	
-	
 	
 	/**
 	 * 

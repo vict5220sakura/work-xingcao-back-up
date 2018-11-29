@@ -79,6 +79,12 @@ public class GoogleAuthenticator {
 	 * @param code      用户输入的 TOTP 验证码
 	 */
 	public static boolean verify(String secretKey, String code) {
+		if(secretKey == null || "".equals(secretKey)){
+			return false;
+		}
+		if(code == null || "".equals(code)){
+			return false;
+		}
 	    long time = System.currentTimeMillis() / 1000 / 30;
 	    for (int i = -timeExcursion; i <= timeExcursion; i++) {
 	        String totp = getTOTP(secretKey, time + i);
