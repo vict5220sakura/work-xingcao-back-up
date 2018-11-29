@@ -42,17 +42,6 @@ public class CommonInit implements ApplicationRunner{
 			log.info("初始化");
 			common.init();
 			log.info("初始化结束");
-			System.out.println("初始化成功,可以移除秘钥文件!!!!!!!!!!!!!!!");
-			System.out.println("初始化成功,可以移除秘钥文件!!!!!!!!!!!!!!!");
-			System.out.println("初始化成功,可以移除秘钥文件!!!!!!!!!!!!!!!");
-			System.out.println("初始化成功,可以移除秘钥文件!!!!!!!!!!!!!!!");
-			System.out.println("初始化成功,可以移除秘钥文件!!!!!!!!!!!!!!!");
-			System.out.println("初始化成功,可以移除秘钥文件!!!!!!!!!!!!!!!");
-			System.out.println("初始化成功,可以移除秘钥文件!!!!!!!!!!!!!!!");
-			System.out.println("初始化成功,可以移除秘钥文件!!!!!!!!!!!!!!!");
-			System.out.println("初始化成功,可以移除秘钥文件!!!!!!!!!!!!!!!");
-			System.out.println("初始化成功,可以移除秘钥文件!!!!!!!!!!!!!!!");
-			System.out.println("初始化成功,可以移除秘钥文件!!!!!!!!!!!!!!!");
 		} catch (Throwable e) {
 			log.error("初始化失败",e);
 		}

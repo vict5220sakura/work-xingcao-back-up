@@ -15,6 +15,7 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECKeyPair;
 
 import com.bithaw.ethSignServer.common.Common;
+import com.bithaw.ethSignServer.db.UserDao;
 import com.bithaw.ethSignServer.util.GoogleAuthenticator;
 import com.bithaw.ethSignServer.util.JSONBuilder;
 import com.bithaw.ethSignServer.util.Web3jUtils;
@@ -25,6 +26,9 @@ public class HtmlController {
 	@Autowired
 	private Common common;
 	
+	@Autowired
+	private UserDao userDao;
+
 	/**
 	 * @author WangWei
 	 * @Description 登录首页
@@ -37,14 +41,13 @@ public class HtmlController {
 		return "index";
 	}
 	
-	@Value("${app.username}")
-	private String username;
-	
-	@Value("${app.password}")
-	private String passowrd;
-	
-	@Value("${app.authenticator.key}")
-	private String authenticatorKey;
+	@RequestMapping("/login")
+	public String login(){
+		if(Common.FIRST_LOGIN_FLAG){
+			return "firstlogin";
+		}
+		return "login";
+	}
 	
 	public boolean isNull(String str){
 		if(str == null){
@@ -59,7 +62,7 @@ public class HtmlController {
 	/**
 	 * 
 	 * @author WangWei
-	 * @Description 登录判断是否登录
+	 * @Description post登录请求
 	 * @method login
 	 * @param username
 	 * @param password
@@ -67,9 +70,9 @@ public class HtmlController {
 	 * @return String
 	 * @date 2018年11月28日 上午9:41:59
 	 */
-	@PostMapping("login")
+	@PostMapping("login-in")
 	@ResponseBody
-	public String login(
+	public String loginIn(
 			@RequestParam("username")String username, 
 			@RequestParam("password")String password, 
 			@RequestParam("sign")String sign){
@@ -78,14 +81,19 @@ public class HtmlController {
 		}
 		if(loginCheck(username, password, sign)){
 			//通过
-			return new JSONBuilder().put("code", "1").put("message", "登录成功").build().toJSONString();
+			//返回token,存入token
+			String createToken = common.createToken(username, password, sign);
+			common.saveToken(createToken);
+			return new JSONBuilder().put("code", "1").put("message", "登录成功").put("token", createToken).build().toJSONString();
 		}
 		return new JSONBuilder().put("code", "0").put("message", "登录失败,请重试").build().toJSONString();
 	}
 	
 	public boolean loginCheck(String username, String password, String sign){
-		if(username.equals(this.username) && password.equals(this.passowrd)){
-			if(GoogleAuthenticator.verify(this.authenticatorKey, sign)){
+		System.out.println("登录验证输入参数" + username + "|" + password + "|" + sign);
+		System.out.println("登录验证userDao参数" + userDao.username + "|" + userDao.password + "|" + userDao.authenticatorKey);
+		if(username.equals(userDao.username) && password.equals(userDao.password)){
+			if(GoogleAuthenticator.verify(userDao.authenticatorKey, sign)){
 				return true;
 			}
 		}
@@ -114,7 +122,7 @@ public class HtmlController {
 		if(isNull(address) || isNull(sign)){
 			return new JSONBuilder().put("code", "0").put("message", "请输入谷歌验证码").build().toJSONString();
 		}
-		if(GoogleAuthenticator.verify(this.authenticatorKey, sign)){
+		if(GoogleAuthenticator.verify(userDao.authenticatorKey, sign)){
 			
 		}else{
 			return new JSONBuilder().put("code", "0").put("message", "谷歌验证码错误").build().toJSONString();
@@ -145,7 +153,7 @@ public class HtmlController {
 			return new JSONBuilder().put("code", "0").put("message", "一些参数为空,请重新输入").build().toJSONString();
 		}
 		
-		if(GoogleAuthenticator.verify(this.authenticatorKey, sign)){
+		if(GoogleAuthenticator.verify(userDao.authenticatorKey, sign)){
 			
 		}else{
 			return new JSONBuilder().put("code", "0").put("message", "谷歌验证码错误").build().toJSONString();
@@ -183,7 +191,7 @@ public class HtmlController {
 			@RequestParam("password")String password, 
 			@RequestParam("sign")String sign){
 		
-		if(GoogleAuthenticator.verify(this.authenticatorKey, sign)){
+		if(GoogleAuthenticator.verify(userDao.authenticatorKey, sign)){
 			
 		}else{
 			return new JSONBuilder().put("code", "0").put("message", "谷歌验证码错误").build().toJSONString();
@@ -225,7 +233,7 @@ public class HtmlController {
 	@PostMapping("change-sign-server-status")
 	@ResponseBody
 	public String changeSignServerStatus(@RequestParam("flag")String flag, @RequestParam("sign")String sign){
-		if(GoogleAuthenticator.verify(this.authenticatorKey, sign)){
+		if(GoogleAuthenticator.verify(userDao.authenticatorKey, sign)){
 			
 		}else{
 			return new JSONBuilder().put("code", "0").put("message", "谷歌验证码错误").build().toJSONString();

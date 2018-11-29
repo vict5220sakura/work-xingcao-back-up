@@ -18,12 +18,14 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 
 import com.alibaba.fastjson.JSONArray;
+import com.bithaw.ethSignServer.db.UserDao;
 import com.bithaw.ethSignServer.util.AESUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class Common {
+	@Value("${serverdir}")
+	private String serverdir;//服务存储目录
+	@Value("${app.userfile}")
+	private String userfile;//用户存储文件
 	@Value("${secretkeyFile}")
 	private String secretkeyFilePath;//秘钥文件地址,不可无效
 	@Value("${secretkeyFileAESPassword}")
@@ -50,13 +56,61 @@ public class Common {
 	@Value("${setRawTransactionUrl}")
 	public String setRawTransactionUrl;//返回签名数据地址,不可为空
 	
+	@Autowired
+	private UserDao userDao;
+	
 	private String secretkeyFileStrDecrypt;
 	public Map<String, String> addressKeyMap = new HashMap<String, String>();//解密后的公钥私钥map
 	
+	//服务开关
 	public static boolean SIGNFLAG = false;
+	
+	//登陆过期实金
+	@Value("${loginOutTime}")
+	private Long loginOutTime;
+	private static Long loginOutTimeStatic;
+	//登录token
+	public static String loginToken;
+	//登录时间
+	public static Long loginTime;
+	
+	/**
+	 * firstLoginFlag : 第一次登录标记
+	 */
+	public static boolean FIRST_LOGIN_FLAG = true;
+	
+	public String createToken(String username, String password, String sign){
+		String aesEncode = AESUtil.AESEncode(secretkeyFileAESPassword, username + "|" + password + "|" + sign);
+		return aesEncode;
+	}
+	
+	public String createToken(String username, String password){
+		String aesEncode = AESUtil.AESEncode(secretkeyFileAESPassword, username + "|" + password);
+		return aesEncode;
+	}
+	
+	public void saveToken(String token){
+		this.loginToken = token;
+		this.loginTime = System.currentTimeMillis();
+	}
+	
+	public static boolean checkLogin(String token){
+		if(token == null){
+			return false;
+		}
+		if(!token.equals(loginToken)){
+			return false;
+		}
+		long overTime = loginOutTimeStatic * 60L * 1000L + loginTime;
+		if(System.currentTimeMillis() > overTime){
+			return false;
+		}
+		return true;
+	}
 	
 	@Value("${signflag}")
 	private String signflag;
+	
 	/**
 	 * @author WangWei
 	 * @Description 初始化
@@ -73,8 +127,10 @@ public class Common {
 		}else{
 			this.SIGNFLAG = true;
 		}
+		loginOutTimeStatic = loginOutTime;
 		readSecretkeyFile();
 		loadAddressKeyMap();
+		userDao.loadUserFile();
 		log.info("初始化结束");
 	}
 	
@@ -88,7 +144,7 @@ public class Common {
 	 */
 	private void readSecretkeyFile() throws IOException{
 		log.info("初始化-读取文件");
-		File file = new File(secretkeyFilePath);
+		File file = new File(serverdir + secretkeyFilePath);
 		if(!file.exists()){
 			return;
 		}
@@ -152,7 +208,7 @@ public class Common {
 	 * @date 2018年11月28日 上午10:12:31
 	 */
 	public void writeSecretkeyFile() throws IOException{
-		File file = new File(secretkeyFilePath);
+		File file = new File(serverdir + secretkeyFilePath);
 		BufferedWriter bWriter = new BufferedWriter(new FileWriter(file, false));
 		if(addressKeyMap.isEmpty()){
 			return;

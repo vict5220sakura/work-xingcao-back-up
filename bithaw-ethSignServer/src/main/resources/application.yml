@@ -1,25 +1,26 @@
 server:
   port: 5051
-secretkeyFile: D:\aesPrivateKey.key #秘钥文件
-secretkeyFileAESPassword: 5220 #秘钥文件密码
+#服务文件存储路径
+serverdir: D:\test\
+#文件存储加密秘钥
+secretkeyFileAESPassword: 123 #秘钥文件密码
+#用户文件存储名
+app.userfile: admin.prop
+loginOutTime: 10 #用户登录过期时间(分钟)
+#初始登录名及密码
+initial.username: admin #登录名
+initial.password: admin #初始密码需要启动时指定,保证一次
+
+#签名服务器配置
+secretkeyFile: aesPrivateKey.key #秘钥文件
 signflag: 0 # 0初始化暂停签名,1初始化开启签名
-#网络签名
-signserver: 
+
+#网络传输
+signserver: #传输签名 
   publicKey: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJg4y/bi17nOvMwOyaerqjmJTnTTsx6qZqow200JXuOfG8WTDpDbR7YM6N2oal9dz2/RgqNuTm9qOaL2sif7gK0CAwEAAQ==
   privateKey: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJZBecO2bOF1fFNmu55KPoWpuhgCsQtjB4U/CUISkDW6/R+olHdNxTLHgr/Y2RoCgS1dTs43/Y2amnd42nTQ3uB5LzyRrgr51RM7XwHZ2qCcfe540+SpTKhqNZAVkrB2KR6g5qxEFBLnR7H2TLUzC0VUGr5h59VNd9A5RRPW/dVDAgMBAAECgYAPPntVENgBE8NWTtDwIUYwl2Sq9PLzXcuwiBGvY2TAHsV5hcfyRrCgEz+/qQd1rRVf/dx17ZZK3ImZX2iCe4JxCYjyR0/0kMPkXOlqcHyA6jfSCMrFBkZuJboMhb9zplS8Aaoaiix3li7LYN8UoCfYY8iRZS+LMO0Us5nkDldcoQJBAOHcFhdt/WGdn3dnJyBII8hbr5OVgu0GpPOYkgttYcbf4dL1UtBbXT+8qjNWY/NDkD9tR+ClOqSUW9WzfIeIe1MCQQCqTpNjy2WLQybiborp+LHvBLR1BI8M9MvmG4n2veAnW++/HYDeEFl0oPRySGJzUPIyokB+/avGaLl5TK+E6/BRAkEAtnpPauyVe8mSrjCsHtvJ9TWGXFG+buwgVyMcU5kzFy+Izx0fpHE8nKM8S6/vnvomT+hl2y0DfTbUH4sdAI+XOwJABpcTzQDJ5SGsF4b/iR4+hGlCMmUCxBWU7kqShCHE0sET/ek+W1l2nLS9wM5cQOoY9SyiIkfepcbXpoH5KMOYgQJAdZPpcjHDbJdqOWd4Qc7Nc5ls83+pot00v+tG04/Y77wcoa+YP6LhjdBT555Gap70PeelaBU1cro5dxjVW1TDnA==  
 getAwaitDataUrl: http://127.0.0.1:3015/sign/getAwaitData #获取待签名数据接口地址
 setRawTransactionUrl: http://127.0.0.1:3015/sign/setRawTransaction #返回签名后数据接口地址
 
-app.username: admin
-app.password: admin
-
-app.authenticator.key: 4xunxuxdcjcwte6eo6jx6i5ooqndfyvp
-
-#spring.thymeleaf.prefix: classpath:/templates/
-#spring.thymeleaf.suffix: .html
-#spring.thymeleaf.mode: HTML5
-#spring.thymeleaf.encoding: UTF-8
-#spring.thymeleaf.content-type: text/html
+#模板缓存
 spring.thymeleaf.cache: false
-#spring.resources.chain.strategy.content.enabled: true
-#spring.resources.chain.strategy.content.paths: /**

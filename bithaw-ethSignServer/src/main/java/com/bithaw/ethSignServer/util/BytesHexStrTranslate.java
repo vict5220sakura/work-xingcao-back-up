@@ -33,7 +33,7 @@ public class BytesHexStrTranslate {
 			buf[index++] = HEX_CHAR[a / 16];
 			buf[index++] = HEX_CHAR[a % 16];
 		}
-
+		
 		return new String(buf);
 	}
 

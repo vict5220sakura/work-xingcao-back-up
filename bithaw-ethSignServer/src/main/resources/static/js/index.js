@@ -1,9 +1,9 @@
 //显示登录页
-	function loginPage(){
-		$("#loginDiv").show();
-		$("#mainDiv").hide();
-		$("#loginout").hide();
-	}
+//	function loginPage(){
+//		$("#loginDiv").show();
+//		$("#mainDiv").hide();
+//		$("#loginout").hide();
+//	}
 	
 	//显示主页
 	function mainPage(){
@@ -40,9 +40,9 @@
 	}
 	
 	$(function(){
-		var signServerToken = localStorage.getItem("signServerToken");
+		var signServerToken = $.cookie("c5SignServerToken");
 		if(signServerToken == null){
-			loginPage();//没有登录显示登录页
+			window.location.href="login";//没有登录跳转到登录页
 		}else{
 			mainPage();//登录显示操作页
 		}
@@ -72,24 +72,8 @@
 	
 	//退出登录
 	$("#loginout").click(function(){
-		localStorage.removeItem("signServerToken");
-		loginPage();
-	});
-	
-	$("#login").click(function(){
-		var params = {};
-		params.username = $("#username").val();
-		params.password = $("#password").val();
-		params.sign = $("#sign").val();
-		$.post("login",params,function(data){
-			if(data.code == "0"){
-				alert(data.message);
-			}
-			if(data.code == "1"){
-				localStorage.setItem("signServerToken", params.username + "|" + params.password);
-				mainPage();
-			}
-		},"JSON");
+		$.cookie("c5SignServerToken", "", { expires: -1 });
+		window.location.reload();//没有登录跳转到登录页
 	});
 	
 	$("#stopSignServer").click(function(){
